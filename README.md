@@ -1,12 +1,22 @@
 # Arduino_ESP32_ButtonManager
 A simple Arduino/ESP32 library that detects multiple button interaction-types, supports debouncing, multiple buttons and easy-to-implement callbacks. 
 
-# Interactions Supported
+# Button Interaction Detection
 * Cick - detected on release, after single press 
 * Double Click - detected on release, after button is double clicked
 * Long Press - detected on release, after button is pressed and held down for 3s+
 * Extra Long Press - detected on release, after button is pressed and held down for 20s+
 * Extra Long Hold  - detected after button is pressed and held down for 20s+
+
+# Automatic Debouncing
+* Ignores button interactions that occur within 50ms
+* Button state toggle management
+
+# Multiple buttons
+* Supports up to 15 buttons
+
+# Library callbacks
+* callbacks can be registered for each interaction-type for a clean implementation.
 
 # Setup
 See example.ino file for implementation and callback registering. 
@@ -19,26 +29,26 @@ See example.ino file for implementation and callback registering.
 GSXButtonManager buttons;
 
 void onButton1ShortPressed(){
+  //code runs when short press is detected
   Serial.println("Button1 Short Pressed CallBack");
 }
 
 void onButton1LongPressed(){
+  //code runs when long press is detected
   Serial.println("Button1 Long Pressed CallBack");
 }
 void setup() {
-  // put your setup code here, to run once:
   Serial.begin(115200);
 
-  buttons.intitializeButton(BUTTON_1_PIN,1);
+  buttons.intitializeButton(BUTTON_1_PIN,1); //intitializeButton(Pin , button id) must be called in setup to register button
 
 
-  buttons.setShortPressCallback(onButton1ShortPressed,1);
-  buttons.setLongPressCallback(onButton1LongPressed,1);
+  buttons.setShortPressCallback(onButton1ShortPressed,1); //setShortPressCallback(callback, button id) register callback function for specific button
+  buttons.setLongPressCallback(onButton1LongPressed,1);  //setLongPressCallback(callback, button id) register callback function for specific button
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  buttons.update();
+  buttons.update(); // Updates all button states & detects button interactions
 }
 
 ```
